@@ -8,6 +8,9 @@
 .nav-link.active {
   @apply text-primary;
 }
+.app-nav.active {
+  @apply bg-base-300 border-primary;
+}
 
 .hero-section-background {
   background-image: linear-gradient(

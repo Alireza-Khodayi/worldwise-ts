@@ -1,4 +1,4 @@
-import { AppRoutes } from '@/core/utilities/app-routes';
+import { AppRoutes } from '@/core/router/app-routes';
 import { Link } from 'react-router-dom';
 
 function Logo() {

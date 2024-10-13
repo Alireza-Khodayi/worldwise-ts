@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Navbar } from '@/components/template/layout/Navbar';
-import { AppRoutes } from '@/core/utilities/app-routes';
+import { AppRoutes } from '@/core/router/app-routes';
 
 export default function NotFoundPage() {
   return (

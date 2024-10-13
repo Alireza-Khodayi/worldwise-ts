@@ -1,4 +1,4 @@
-import { Logo } from './Logo';
+import { Logo } from '@/components/template/UI/Logo';
 import { NavLinks } from './NavLinks';
 
 function Navbar() {

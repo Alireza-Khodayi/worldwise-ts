@@ -1,9 +1,11 @@
-import { AppNav } from '@/components/pages/AppLayout';
+import { Map } from '@/components/pages/AppLayout/Map';
+import { Sidebar } from '@/components/pages/AppLayout/Sidebar';
 
 function AppLayout() {
   return (
-    <div>
-      <AppNav />
+    <div className='flex h-screen overscroll-y-none relative'>
+      <Sidebar />
+      <Map />
     </div>
   );
 }

@@ -1,11 +1,11 @@
+import { useState } from 'react';
 import { Navbar } from '@/components/template/layout/Navbar';
 import { EmailIcon, KeyIcon } from '@/core/utilities/Icons';
-import { useState } from 'react';
 
 export default function LoginPage() {
   // PRE-FILL FOR DEV PURPOSES
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('qwerty');
+  const [password, setPassword] = useState('');
 
   return (
     <>
@@ -15,7 +15,7 @@ export default function LoginPage() {
           <h2 className='font-bold text-lg text-zinc-200'>Login</h2>
           <div className='flex flex-col gap-2'>
             <label className='input input-bordered border-opacity-50 flex items-center gap-2'>
-              <EmailIcon />
+              <EmailIcon className='h-4 w-4 opacity-70' />
               <input
                 type='email'
                 id='email'
@@ -29,7 +29,7 @@ export default function LoginPage() {
 
           <div className='flex flex-col gap-2'>
             <label className='input input-bordered border-opacity-50 flex items-center gap-2'>
-              <KeyIcon />
+              <KeyIcon className='h-4 w-4 opacity-70' />
               <input
                 type='password'
                 id='password'
