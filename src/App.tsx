@@ -1,10 +1,13 @@
 import { RouterProvider } from 'react-router-dom';
 import { router } from '@/core/router';
+import { CityProvider } from './core/context/CitiesContext';
 
 function App() {
   return (
     <>
-      <RouterProvider router={router} />
+      <CityProvider>
+        <RouterProvider router={router} />
+      </CityProvider>
     </>
   );
 }

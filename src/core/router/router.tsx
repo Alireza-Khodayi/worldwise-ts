@@ -8,6 +8,7 @@ import {
   PricingPage,
   ProductPage,
 } from '@/pages';
+import { CitiesList } from '@/components/pages/AppLayout/Sidebar/CitiesList';
 
 export const router = createBrowserRouter([
   { path: AppRoutes.home, element: <HomePage /> },
@@ -17,8 +18,8 @@ export const router = createBrowserRouter([
     path: AppRoutes.app,
     element: <AppLayout />,
     children: [
-      { index: true, element: <p>cities</p> },
-      { path: AppRoutes.cities, element: <p>cities</p> },
+      { index: true, element: <CitiesList /> },
+      { path: AppRoutes.cities, element: <CitiesList /> },
       { path: AppRoutes.countries, element: <p>countries</p> },
       { path: AppRoutes.form, element: <p>form</p> },
     ],

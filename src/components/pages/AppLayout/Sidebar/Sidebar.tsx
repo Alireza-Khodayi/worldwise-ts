@@ -1,7 +1,7 @@
+import { Outlet } from 'react-router-dom';
 import { Logo } from '@/components/template/UI/Logo';
 import { AppNav } from './AppNav';
-import AppFooter from './AppFooter';
-import { Outlet } from 'react-router-dom';
+import { AppFooter } from './AppFooter';
 
 function Sidebar() {
   return (
