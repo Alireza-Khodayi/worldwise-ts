@@ -1,5 +1,6 @@
 import { useCities } from '@/core/context/CitiesContext';
 import CityItem from './CityItem';
+import { Message } from '@/components/template/UI/Message';
 
 function CitiesList() {
   const context = useCities();
@@ -9,7 +10,10 @@ function CitiesList() {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
-  console.log(data);
+  if (!data.length)
+    return (
+      <Message message='Add your first city by clicking on a city on the map' />
+    );
   return (
     <ul className='w-full h-[65vh] overflow-y-scroll overflow-x-hidden flex flex-col gap-6 no-scrollbar'>
       {data.map(city => (
