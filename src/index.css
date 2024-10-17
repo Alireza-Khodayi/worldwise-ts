@@ -1,3 +1,5 @@
+@import 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -10,6 +12,27 @@
 }
 .app-nav.active {
   @apply bg-base-300 border-primary;
+}
+
+/* Here we want to style classes that are coming from leaflet. So we want CSS Modules to give us the ACTUAL classnames, not to add some random ID to them, because then they won't match the classnames defined inside the map. The solution is to define these classes as GLOBAL */
+.leaflet-popup .leaflet-popup-content-wrapper {
+  @apply bg-base-100 text-zinc-400 rounded-md pr-2;
+}
+
+.leaflet-popup .leaflet-popup-content {
+  @apply text-xl flex items-center gap-4;
+}
+
+.leaflet-popup .leaflet-popup-content span:first-child {
+  @apply text-sm;
+}
+
+.leaflet-popup .leaflet-popup-tip {
+  @apply bg-base-100;
+}
+
+.leaflet-popup-content-wrapper {
+  @apply border-l-4 border-primary;
 }
 
 .hero-section-background {
@@ -28,4 +51,19 @@
 .no-scrollbar {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+}
+
+:root {
+  --leaflet-tile-filter: brightness(0.6) invert(1) contrast(3)
+    hue-rotate(200deg) saturate(0.3) brightness(0.7);
+}
+
+@media (prefers-color-scheme: dark) {
+  .leaflet-tile {
+    filter: var(--leaflet-tile-filter, none);
+  }
+
+  .leaflet-container {
+    background: #303030;
+  }
 }

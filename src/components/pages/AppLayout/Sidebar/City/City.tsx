@@ -1,36 +1,26 @@
 import { BackButton } from '@/components/template/UI/BackButton';
-import { CityItem } from '@/core/context/CitiesContext';
+import { useCities } from '@/core/context/CitiesContext';
 import { formatDate } from '@/core/utilities/format-date';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 function City() {
-  const [currentCity, setCurrentCity] = useState<CityItem>({} as CityItem);
   const { id } = useParams();
+  const { getCity, currentCity, loading } = useCities();
 
+  useEffect(
+    function () {
+      getCity(Number(id));
+    },
+    [id],
+  );
+
+  if (loading) return <p>Loading</p>;
   //   const [searchParams, setSearchParams] = useSearchParams();
   //   const lat = searchParams.get('lat');
   //   const lng = searchParams.get('lng');
 
-  useEffect(
-    function () {
-      async function fetchCity() {
-        const response = await fetch(`http://localhost:8000/cities/${id}`);
-        const data = await response.json();
-        setCurrentCity(data);
-      }
-      fetchCity();
-    },
-    [id],
-  );
-  const { cityName, country, emoji, date, position, notes } = currentCity;
-  // TEMP DATA
-  //   const currentCity = {
-  //     cityName: 'Lisbon',
-  //     emoji: '🇵🇹',
-  //     date: '2027-10-31T15:59:59.138Z',
-  //     notes: 'My favorite city so far!',
-  //   };
+  const { cityName, emoji, date, notes } = currentCity;
 
   return (
     <div className='py-8 px-12 max-h-[70%] bg-base-100 shadow-lg rounded-lg overflow-auto w-full flex flex-col gap-8'>
