@@ -8,10 +8,7 @@ interface Country {
 }
 
 function CountriesList() {
-  const context = useCities();
-  if (!context) return <p>Somthing went wrong!</p>;
-
-  const { data, loading, error } = context;
+  const { data, loading, error } = useCities();
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;

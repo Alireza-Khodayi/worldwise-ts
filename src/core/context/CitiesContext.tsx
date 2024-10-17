@@ -24,8 +24,10 @@ interface CityContextType {
   data: CityItem[];
   loading: boolean;
   error: Error | null;
+  currentCity: CityItem;
+  getCity: (id: number) => void;
 }
-
+const BASE_URL = 'http://localhost:8000';
 // Create the context with a default value
 const CityContext = createContext<CityContextType | undefined>(undefined);
 
@@ -37,11 +39,12 @@ const CityProvider: React.FC<CityProviderProps> = ({ children }) => {
   const [data, setData] = useState<CityItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
+  const [currentCity, setCurrentCity] = useState<CityItem>({} as CityItem);
 
   useEffect(() => {
-    const fetchData = async () => {
+    async function fetchCities() {
       try {
-        const response = await fetch('http://localhost:8000/cities'); // Replace with your API
+        const response = await fetch(`${BASE_URL}/cities`); // Replace with your API
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -56,13 +59,32 @@ const CityProvider: React.FC<CityProviderProps> = ({ children }) => {
       } finally {
         setLoading(false);
       }
-    };
+    }
 
-    fetchData();
+    fetchCities();
   }, []);
 
+  async function getCity(id: number) {
+    try {
+      const response = await fetch(`${BASE_URL}/cities/${id}`); // Replace with your API
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const result: CityItem = await response.json();
+      setCurrentCity(result);
+    } catch (error) {
+      setError(
+        error instanceof Error ? error : new Error('An unknown error occurred'),
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
-    <CityContext.Provider value={{ data, loading, error }}>
+    <CityContext.Provider
+      value={{ data, loading, error, currentCity, getCity }}
+    >
       {children}
     </CityContext.Provider>
   );
@@ -70,6 +92,8 @@ const CityProvider: React.FC<CityProviderProps> = ({ children }) => {
 
 const useCities = () => {
   const context = useContext(CityContext);
+  if (context === undefined)
+    throw new Error('CitiesContext was used outside of the CitiesProvider');
   return context;
 };
 
