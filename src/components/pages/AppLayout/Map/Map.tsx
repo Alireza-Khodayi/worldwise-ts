@@ -3,17 +3,21 @@ import { LatLngExpression } from 'leaflet';
 import L from 'leaflet';
 import { useEffect, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
-import { useSearchParams } from 'react-router-dom';
 import { ChangeCenter } from './ChangeCenter';
 import DetectClick from './DetectClick';
+import { useGeolocation, useUrlPosition } from '@/hooks';
 
 function Map() {
   const { data } = useCities();
 
   const [mapPosition, setMapPosition] = useState<LatLngExpression>([40, 0]);
-  const [searchParams] = useSearchParams();
-  const mapLat = searchParams.get('lat');
-  const mapLng = searchParams.get('lng');
+  const {
+    isLoading: isLoadingPosition,
+    position: geoLocationPosition,
+    getPosition,
+  } = useGeolocation();
+
+  const [mapLat, mapLng] = useUrlPosition();
 
   const markerIcon = new L.Icon({
     iconUrl:
@@ -33,8 +37,24 @@ function Map() {
     [mapLat, mapLng],
   );
 
+  useEffect(
+    function () {
+      if (geoLocationPosition)
+        setMapPosition([geoLocationPosition[0], geoLocationPosition[1]]);
+    },
+    [geoLocationPosition],
+  );
+
   return (
     <div className='flex-1 h-full bg-base-100 relative'>
+      {!geoLocationPosition && (
+        <button
+          className='btn btn-primary btn-wide absolute bottom-16 left-1/3 z-[500] '
+          onClick={getPosition}
+        >
+          {isLoadingPosition ? 'Loading...' : 'Use your position'}
+        </button>
+      )}
       <MapContainer
         className='flex-1 h-full bg-base-100 relative'
         center={mapPosition}
