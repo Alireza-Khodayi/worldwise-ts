@@ -1,9 +1,9 @@
 import {
   createContext,
-  useState,
   useEffect,
   ReactNode,
   useContext,
+  useReducer,
 } from 'react';
 
 export interface CityItem {
@@ -19,7 +19,25 @@ export interface CityItem {
   id?: string;
 }
 
-// Define the context type
+interface State {
+  cities: CityItem[];
+  loading: boolean;
+  error: Error | null;
+  currentCity: CityItem;
+}
+
+interface Action {
+  type:
+    | 'loading'
+    | 'cities/loaded'
+    | 'city/loaded'
+    | 'city/created'
+    | 'city/deleted'
+    | 'rejected';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  payload?: any;
+}
+
 interface CityContextType {
   cities: CityItem[];
   loading: boolean;
@@ -31,36 +49,87 @@ interface CityContextType {
 }
 
 const BASE_URL = 'http://localhost:8000';
-// Create the context with a default value
-const CityContext = createContext<CityContextType | undefined>(undefined);
+const CityContext = createContext<CityContextType>({} as CityContextType);
+
+const initialState: State = {
+  cities: [],
+  loading: false,
+  currentCity: {} as CityItem,
+  error: null,
+};
+
+function reducer(state: State, action: Action) {
+  switch (action.type) {
+    case 'loading':
+      return { ...state, loading: true };
+
+    case 'cities/loaded':
+      return {
+        ...state,
+        loading: false,
+        cities: action.payload,
+      };
+
+    case 'city/loaded':
+      return {
+        ...state,
+        loading: false,
+        currentCity: action.payload,
+      };
+
+    case 'city/created':
+      return {
+        ...state,
+        loading: false,
+        cities: [...state.cities, action.payload],
+        currentCity: action.payload,
+      };
+
+    case 'city/deleted':
+      return {
+        ...state,
+        loading: false,
+        cities: state.cities.filter(city => city.id !== action.payload),
+        currentCity: {},
+      };
+
+    case 'rejected':
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    default:
+      throw new Error('Unknown action type');
+  }
+}
 
 interface CityProviderProps {
   children: ReactNode;
 }
 
 const CityProvider: React.FC<CityProviderProps> = ({ children }) => {
-  const [cities, setCities] = useState<CityItem[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<Error | null>(null);
-  const [currentCity, setCurrentCity] = useState<CityItem>({} as CityItem);
+  const [{ cities, loading, currentCity, error }, dispatch] = useReducer(
+    reducer,
+    initialState,
+  );
 
   useEffect(() => {
     async function fetchCities() {
+      dispatch({ type: 'loading' });
       try {
-        const response = await fetch(`${BASE_URL}/cities`); // Replace with your API
+        const response = await fetch(`${BASE_URL}/cities`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         const result: CityItem[] = await response.json();
-        setCities(result);
-      } catch (error) {
-        setError(
-          error instanceof Error
-            ? error
-            : new Error('An unknown error occurred'),
-        );
-      } finally {
-        setLoading(false);
+        dispatch({ type: 'cities/loaded', payload: result });
+      } catch {
+        dispatch({
+          type: 'rejected',
+          payload: 'There was an error on loading cities.',
+        });
       }
     }
 
@@ -68,25 +137,32 @@ const CityProvider: React.FC<CityProviderProps> = ({ children }) => {
   }, []);
 
   async function getCity(id: string) {
+    if (id === currentCity.id) return;
+
+    dispatch({ type: 'loading' });
+
     try {
-      const response = await fetch(`${BASE_URL}/cities/${id}`); // Replace with your API
+      const response = await fetch(`${BASE_URL}/cities/${id}`);
+
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
+
       const result: CityItem = await response.json();
-      setCurrentCity(result);
-    } catch (error) {
-      setError(
-        error instanceof Error ? error : new Error('An unknown error occurred'),
-      );
-    } finally {
-      setLoading(false);
+
+      dispatch({ type: 'city/loaded', payload: result });
+    } catch {
+      dispatch({
+        type: 'rejected',
+        payload: 'There was an error on loading city.',
+      });
     }
   }
 
   async function createCity(newCity: CityItem) {
+    dispatch({ type: 'loading' });
+
     try {
-      setLoading(true);
       const response = await fetch(`${BASE_URL}/cities`, {
         method: 'POST',
         body: JSON.stringify(newCity),
@@ -94,38 +170,40 @@ const CityProvider: React.FC<CityProviderProps> = ({ children }) => {
           'Content-Type': 'application/json',
         },
       });
+
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
+
       const result: CityItem = await response.json();
 
-      setCities(cities => [...cities, result]);
-    } catch (error) {
-      setError(
-        error instanceof Error ? error : new Error('Error on creating city'),
-      );
-    } finally {
-      setLoading(false);
+      dispatch({ type: 'city/created', payload: result });
+    } catch {
+      dispatch({
+        type: 'rejected',
+        payload: 'There was an error on creating the city.',
+      });
     }
   }
 
   async function deleteCity(id: string) {
+    dispatch({ type: 'loading' });
+
     try {
-      setLoading(true);
       const response = await fetch(`${BASE_URL}/cities/${id}`, {
         method: 'DELETE',
       });
+
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
 
-      setCities(cities => cities.filter(city => city.id !== id));
-    } catch (error) {
-      setError(
-        error instanceof Error ? error : new Error('Error on deleting city...'),
-      );
-    } finally {
-      setLoading(false);
+      dispatch({ type: 'city/deleted', payload: id });
+    } catch {
+      dispatch({
+        type: 'rejected',
+        payload: 'There was an error on deleting the city.',
+      });
     }
   }
 
