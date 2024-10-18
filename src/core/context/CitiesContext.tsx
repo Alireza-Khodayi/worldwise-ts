@@ -27,6 +27,7 @@ interface CityContextType {
   currentCity: CityItem;
   getCity: (id: string) => void;
   createCity: (newCity: CityItem) => void;
+  deleteCity: (id: string) => void;
 }
 
 const BASE_URL = 'http://localhost:8000';
@@ -101,7 +102,27 @@ const CityProvider: React.FC<CityProviderProps> = ({ children }) => {
       setCities(cities => [...cities, result]);
     } catch (error) {
       setError(
-        error instanceof Error ? error : new Error('An unknown error occurred'),
+        error instanceof Error ? error : new Error('Error on creating city'),
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function deleteCity(id: string) {
+    try {
+      setLoading(true);
+      const response = await fetch(`${BASE_URL}/cities/${id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      setCities(cities => cities.filter(city => city.id !== id));
+    } catch (error) {
+      setError(
+        error instanceof Error ? error : new Error('Error on deleting city...'),
       );
     } finally {
       setLoading(false);
@@ -110,7 +131,15 @@ const CityProvider: React.FC<CityProviderProps> = ({ children }) => {
 
   return (
     <CityContext.Provider
-      value={{ cities, loading, error, currentCity, getCity, createCity }}
+      value={{
+        cities,
+        loading,
+        error,
+        currentCity,
+        getCity,
+        createCity,
+        deleteCity,
+      }}
     >
       {children}
     </CityContext.Provider>
