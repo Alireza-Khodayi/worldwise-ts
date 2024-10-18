@@ -1,6 +1,6 @@
 import { BackButton } from '@/components/template/UI/BackButton';
 import { Message } from '@/components/template/UI/Message';
-import { CityItem, useCities } from '@/core/context/CitiesContext';
+import { CityItem, useCities } from '@/core/contexts/CitiesContext';
 import { convertToEmoji } from '@/core/utilities/convert-to-emoji';
 import { useUrlPosition } from '@/hooks';
 import { useEffect, useState } from 'react';

@@ -1,4 +1,4 @@
-import { useCities, type CityItem } from '@/core/context/CitiesContext';
+import { useCities, type CityItem } from '@/core/contexts/CitiesContext';
 import { formatDate } from '@/core/utilities/format-date';
 import { XIcon } from '@/core/utilities/Icons';
 import { Link } from 'react-router-dom';

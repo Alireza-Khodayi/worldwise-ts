@@ -1,5 +1,5 @@
 import { BackButton } from '@/components/template/UI/BackButton';
-import { useCities } from '@/core/context/CitiesContext';
+import { useCities } from '@/core/contexts/CitiesContext';
 import { formatDate } from '@/core/utilities/format-date';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
@@ -12,6 +12,7 @@ function City() {
     function () {
       getCity(id!);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [id],
   );
 
