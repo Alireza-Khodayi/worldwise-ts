@@ -37,63 +37,15 @@
       "id": "98443197"
     },
     {
-      "id": "9033",
-      "cityName": "Teregova",
-      "country": "Romania",
-      "emoji": "🇷🇴",
-      "date": "2024-10-17T21:00:48.243Z",
-      "notes": "",
-      "position": {
-        "lat": 45.120052841530544,
-        "lng": 22.32421875
-      }
-    },
-    {
-      "id": "08e1",
-      "cityName": "Tamanghasset",
+      "id": "318f",
+      "cityName": "Bordj Omar Driss",
       "country": "Algeria",
       "emoji": "🇩🇿",
-      "date": "2024-10-17T21:10:13.925Z",
+      "date": "2024-10-18T06:54:03.644Z",
       "notes": "",
       "position": {
-        "lat": 21.12549763660629,
-        "lng": 5.493164062500001
-      }
-    },
-    {
-      "id": "0522",
-      "cityName": "Tera",
-      "country": "Niger (the)",
-      "emoji": "🇳🇪",
-      "date": "2024-10-17T21:10:19.906Z",
-      "notes": "",
-      "position": {
-        "lat": 14.179186142354181,
-        "lng": 0.5712890625000001
-      }
-    },
-    {
-      "id": "1c04",
-      "cityName": "Ouadane",
-      "country": "Mauritania",
-      "emoji": "🇲🇷",
-      "date": "2024-10-17T21:10:22.579Z",
-      "notes": "",
-      "position": {
-        "lat": 21.166483858206583,
-        "lng": -10.546875000000002
-      }
-    },
-    {
-      "id": "248f",
-      "cityName": "Beni Abbes",
-      "country": "Algeria",
-      "emoji": "🇩🇿",
-      "date": "2024-10-17T21:10:27.115Z",
-      "notes": "",
-      "position": {
-        "lat": 30.637912028341123,
-        "lng": -1.7138671875000002
+        "lat": 28.459033019728068,
+        "lng": 6.240234375
       }
     }
   ]

@@ -8,7 +8,13 @@ interface IProps {
 }
 
 function CityItem({ city }: IProps) {
-  const { currentCity } = useCities();
+  const { currentCity, deleteCity } = useCities();
+
+  function handleDelete(event: React.MouseEvent<HTMLButtonElement>) {
+    event.preventDefault();
+    deleteCity(city.id!);
+  }
+
   return (
     <li>
       <Link
@@ -20,7 +26,10 @@ function CityItem({ city }: IProps) {
         <span className='text-xl'>{city.emoji}</span>
         <h3 className='text-lg font-semibold mr-auto'>{city.cityName}</h3>
         <time className='text-sm'>({formatDate(city.date)})</time>
-        <button className='btn btn-xs btn-circle btn-ghost'>
+        <button
+          className='btn btn-xs btn-circle btn-ghost'
+          onClick={handleDelete}
+        >
           <XIcon className='h-4 w-4' />
         </button>
       </Link>
