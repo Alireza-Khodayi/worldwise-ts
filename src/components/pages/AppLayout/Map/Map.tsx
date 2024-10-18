@@ -8,7 +8,7 @@ import DetectClick from './DetectClick';
 import { useGeolocation, useUrlPosition } from '@/hooks';
 
 function Map() {
-  const { data } = useCities();
+  const { cities } = useCities();
 
   const [mapPosition, setMapPosition] = useState<LatLngExpression>([40, 0]);
   const {
@@ -65,7 +65,7 @@ function Map() {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
         />
-        {data.map(city => (
+        {cities.map(city => (
           <Marker position={city.position} key={city.id} icon={markerIcon}>
             <Popup>
               <span>{city.emoji}</span>

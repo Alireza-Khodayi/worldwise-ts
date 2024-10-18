@@ -10,15 +10,12 @@ function City() {
 
   useEffect(
     function () {
-      getCity(Number(id));
+      getCity(id!);
     },
     [id],
   );
 
   if (loading) return <p>Loading</p>;
-  //   const [searchParams, setSearchParams] = useSearchParams();
-  //   const lat = searchParams.get('lat');
-  //   const lng = searchParams.get('lng');
 
   const { cityName, emoji, date, notes } = currentCity;
 
