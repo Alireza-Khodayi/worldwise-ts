@@ -10,23 +10,25 @@ export interface CityItem {
   cityName: string;
   country: string;
   emoji: string;
-  date: string;
-  notes: string;
+  date: Date;
+  notes?: string;
   position: {
     lat: number;
     lng: number;
   };
-  id: number;
+  id?: string;
 }
 
 // Define the context type
 interface CityContextType {
-  data: CityItem[];
+  cities: CityItem[];
   loading: boolean;
   error: Error | null;
   currentCity: CityItem;
-  getCity: (id: number) => void;
+  getCity: (id: string) => void;
+  createCity: (newCity: CityItem) => void;
 }
+
 const BASE_URL = 'http://localhost:8000';
 // Create the context with a default value
 const CityContext = createContext<CityContextType | undefined>(undefined);
@@ -36,7 +38,7 @@ interface CityProviderProps {
 }
 
 const CityProvider: React.FC<CityProviderProps> = ({ children }) => {
-  const [data, setData] = useState<CityItem[]>([]);
+  const [cities, setCities] = useState<CityItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
   const [currentCity, setCurrentCity] = useState<CityItem>({} as CityItem);
@@ -49,7 +51,7 @@ const CityProvider: React.FC<CityProviderProps> = ({ children }) => {
           throw new Error('Network response was not ok');
         }
         const result: CityItem[] = await response.json();
-        setData(result);
+        setCities(result);
       } catch (error) {
         setError(
           error instanceof Error
@@ -64,7 +66,7 @@ const CityProvider: React.FC<CityProviderProps> = ({ children }) => {
     fetchCities();
   }, []);
 
-  async function getCity(id: number) {
+  async function getCity(id: string) {
     try {
       const response = await fetch(`${BASE_URL}/cities/${id}`); // Replace with your API
       if (!response.ok) {
@@ -81,9 +83,34 @@ const CityProvider: React.FC<CityProviderProps> = ({ children }) => {
     }
   }
 
+  async function createCity(newCity: CityItem) {
+    try {
+      setLoading(true);
+      const response = await fetch(`${BASE_URL}/cities`, {
+        method: 'POST',
+        body: JSON.stringify(newCity),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const result: CityItem = await response.json();
+
+      setCities(cities => [...cities, result]);
+    } catch (error) {
+      setError(
+        error instanceof Error ? error : new Error('An unknown error occurred'),
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <CityContext.Provider
-      value={{ data, loading, error, currentCity, getCity }}
+      value={{ cities, loading, error, currentCity, getCity, createCity }}
     >
       {children}
     </CityContext.Provider>
