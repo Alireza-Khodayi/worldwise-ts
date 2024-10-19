@@ -15,7 +15,7 @@ function HomeHeroSection() {
           of. Never forget your wonderful experiences, and show your friends how
           you have wandered the world.
         </h2>
-        <Link to={AppRoutes.app} className='btn btn-primary px-8'>
+        <Link to={AppRoutes.login} className='btn btn-primary px-8'>
           Start tracking now
         </Link>
       </section>
