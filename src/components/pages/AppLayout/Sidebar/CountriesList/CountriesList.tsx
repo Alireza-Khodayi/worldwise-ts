@@ -1,5 +1,5 @@
 import { Message } from '@/components/template/UI/Message';
-import { CityItem, useCities } from '@/core/context/CitiesContext';
+import { CityItem, useCities } from '@/core/contexts/CitiesContext';
 import { CountryItem } from './CountryItem';
 
 interface Country {

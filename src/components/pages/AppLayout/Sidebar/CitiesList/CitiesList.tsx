@@ -1,4 +1,4 @@
-import { useCities } from '@/core/context/CitiesContext';
+import { useCities } from '@/core/contexts/CitiesContext';
 import CityItem from './CityItem';
 import { Message } from '@/components/template/UI/Message';
 

@@ -1,4 +1,4 @@
-import { useCities } from '@/core/context/CitiesContext';
+import { useCities } from '@/core/contexts/CitiesContext';
 import { LatLngExpression } from 'leaflet';
 import L from 'leaflet';
 import { useEffect, useState } from 'react';

@@ -12,6 +12,7 @@ import { CitiesList } from '@/components/pages/AppLayout/Sidebar/CitiesList';
 import { CountriesList } from '@/components/pages/AppLayout/Sidebar/CountriesList';
 import { City } from '@/components/pages/AppLayout/Sidebar/City';
 import { Form } from '@/components/pages/AppLayout/Sidebar/Form';
+import { ProtectedRoutes } from './ProtectedRoutes';
 
 export const router = createBrowserRouter([
   { path: AppRoutes.home, element: <HomePage /> },
@@ -19,7 +20,11 @@ export const router = createBrowserRouter([
   { path: AppRoutes.pricing, element: <PricingPage /> },
   {
     path: AppRoutes.app,
-    element: <AppLayout />,
+    element: (
+      <ProtectedRoutes>
+        <AppLayout />
+      </ProtectedRoutes>
+    ),
     children: [
       { index: true, element: <Navigate replace to='cities' /> },
       { path: AppRoutes.cities, element: <CitiesList /> },

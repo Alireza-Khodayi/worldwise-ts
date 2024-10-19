@@ -1,13 +1,16 @@
 import { RouterProvider } from 'react-router-dom';
 import { router } from '@/core/router';
-import { CityProvider } from '@/core/context/CitiesContext';
+import { CityProvider } from '@/core/contexts/CitiesContext';
+import { AuthProvider } from '@/core/contexts/FakeAuthContext';
 
 function App() {
   return (
     <>
-      <CityProvider>
-        <RouterProvider router={router} />
-      </CityProvider>
+      <AuthProvider>
+        <CityProvider>
+          <RouterProvider router={router} />
+        </CityProvider>
+      </AuthProvider>
     </>
   );
 }
