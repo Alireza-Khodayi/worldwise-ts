@@ -12,8 +12,7 @@ function City() {
     function () {
       getCity(id!);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [id],
+    [id, getCity],
   );
 
   if (loading) return <p>Loading</p>;
