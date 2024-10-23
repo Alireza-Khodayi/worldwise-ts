@@ -4,6 +4,7 @@ import {
   ReactNode,
   useContext,
   useReducer,
+  useCallback,
 } from 'react';
 
 export interface CityItem {
@@ -136,28 +137,31 @@ const CityProvider: React.FC<CityProviderProps> = ({ children }) => {
     fetchCities();
   }, []);
 
-  async function getCity(id: string) {
-    if (id === currentCity.id) return;
+  const getCity = useCallback(
+    async function getCity(id: string) {
+      if (id === currentCity.id) return;
 
-    dispatch({ type: 'loading' });
+      dispatch({ type: 'loading' });
 
-    try {
-      const response = await fetch(`${BASE_URL}/cities/${id}`);
+      try {
+        const response = await fetch(`${BASE_URL}/cities/${id}`);
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const result: CityItem = await response.json();
+
+        dispatch({ type: 'city/loaded', payload: result });
+      } catch {
+        dispatch({
+          type: 'rejected',
+          payload: 'There was an error on loading city.',
+        });
       }
-
-      const result: CityItem = await response.json();
-
-      dispatch({ type: 'city/loaded', payload: result });
-    } catch {
-      dispatch({
-        type: 'rejected',
-        payload: 'There was an error on loading city.',
-      });
-    }
-  }
+    },
+    [currentCity.id],
+  );
 
   async function createCity(newCity: CityItem) {
     dispatch({ type: 'loading' });
